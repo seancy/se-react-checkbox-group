@@ -17,7 +17,7 @@ const arr = [
 
 const App = () => (
   <div style={styles}>
-    <Component data={arr} onChange={e=>console.log(e)} />
+    <Component data={arr} onChange={(data)=>console.log(data)} />
   </div>
 );
 

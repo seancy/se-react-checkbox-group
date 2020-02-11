@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 import "./component.scss"
 
 class Component extends React.Component {
@@ -8,37 +9,20 @@ class Component extends React.Component {
         this.state = {
             data: props.data.map(p=>({...p, checked:false})),
         };
-
-    }
-
-    getData() {
-        return this.state.data.filter(p => p.checked)
-    }
-
-    clean() {
-        this.setState(state => {
-            const data = [...state.data]
-            data.forEach(p => {
-                p.checked = false;
-                return p;
-            });
-            return {
-                data
-            }
-        })
     }
 
     changeCheckboxStatus(e, item) {
-        this.setState(state=>{
-            const data = [...state.data]
-            data.filter(p => p.value == item.value);
+        this.setState(prevState=>{
+            const data = [...prevState.data]
+            //data.filter(p => p.value == item.value);
             return data;
+        },()=>{
+            const {onChange} = this.props
+            if (onChange){
+                onChange(this.state.data);
+            }
         })
         item.checked = e.target.checked;
-        const {onChange} = this.props
-        if (onChange){
-            onChange(e, item);
-        }
     }
 
     render() {
@@ -62,3 +46,10 @@ class Component extends React.Component {
 
 export default Component;
 
+Component.propTypes = {
+    data:PropTypes.arrayOf(PropTypes.exact({
+        value:PropTypes.string,
+        text:PropTypes.string
+    })),
+    onChange:PropTypes.func,
+}
