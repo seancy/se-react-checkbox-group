@@ -7,34 +7,41 @@ class Component extends React.Component {
         super(props, context);
 
         this.state = {
-            data: props.data.map(p=>({...p, checked:false})),
+            checkedList:[]
         };
     }
 
+    clean(){
+        this.setState({checkedList:[]}, this.fireOnChange.bind(this))
+    }
+
     changeCheckboxStatus(e, item) {
-        this.setState(prevState=>{
-            const data = [...prevState.data]
-            //data.filter(p => p.value == item.value);
-            return data;
-        },()=>{
-            const {onChange} = this.props
-            if (onChange){
-                onChange(this.state.data);
-            }
-        })
-        item.checked = e.target.checked;
+        let checkedList =this.state.checkedList;
+        if (e.target.checked){
+             checkedList.push(item.value)
+            this.setState({checkedList}, this.fireOnChange.bind(this))
+        }else{
+            checkedList = checkedList.filter(val=>val !== item.value)
+            this.setState({ checkedList }, this.fireOnChange.bind(this))
+        }
+    }
+
+    fireOnChange(){
+        const {onChange, data} = this.props
+        const checkedItems = data.filter(p=>this.state.checkedList.includes(p.value))
+        onChange && onChange(checkedItems)
     }
 
     render() {
-        const {} = this.state;
+        const {data} = this.props;
         return (
             <ul className={'se-react-checkbox-group ' + (this.props.className || '')}>
-                {this.state.data.map(item => {
+                {data.map(item => {
                     const id = 'se-react-checkbox-group-box' + item.value;
                     return (
                         <li key={item.value}>
                             <input type="checkbox" id={id} value={item.value}
-                                   checked={item.checked} onChange={e => this.changeCheckboxStatus(e, item)}/>
+                                   checked={this.state.checkedList.includes(item.value)} onChange={e => this.changeCheckboxStatus(e, item)}/>
                             <label htmlFor={id}>{item.text}</label>
                         </li>
                     )
