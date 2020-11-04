@@ -20,12 +20,13 @@ class Component extends React.Component {
         const checkedList = props.checkedList || []
 
         this.state = {
+            prefire: props.prefire,
             checkedList
         };
     }
 
     componentDidMount() {
-        if (this.props.data.length > 0 && (this.props.checkedList || []).length > 0){
+        if (this.props.data.length > 0 && (this.props.checkedList || []).length > 0 && this.state.prefire){
             this.fireChange()
         }
     }
@@ -33,7 +34,7 @@ class Component extends React.Component {
     UNSAFE_componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.data.length > 0 &&
             JSON.stringify(this.props.data) != JSON.stringify(nextProps.data) &&
-            (this.props.checkedList || []).length > 0){
+            (this.props.checkedList || []).length > 0 && this.state.prefire) {
             setTimeout(this.fireChange.bind(this), 100)
         }
     }
@@ -70,6 +71,7 @@ class Component extends React.Component {
                             <input type="checkbox" id={id} value={item.value}
                                    checked={this.state.checkedList.includes(item.value)} onChange={e => this.changeCheckboxStatus(e, item)}/>
                             <label htmlFor={id}>{item.text}</label>
+                            {item.label && <span>{item.label}</span>}
                         </li>
                     )
                 })}
@@ -85,5 +87,7 @@ Component.propTypes = {
         value:PropTypes.string,
         text:PropTypes.string
     })),
+    prefire:PropTypes.Boolean,
+    checkedList:PropTypes.arrayOf(PropTypes.String),
     onChange:PropTypes.func,
 }
