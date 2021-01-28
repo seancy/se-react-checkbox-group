@@ -7,8 +7,8 @@ const arr = [
 ]
 const arr1 = [
     { value:'a0', text:'name', label:100 },
-    { value:'a1', text:'address', label:50 },
-    { value:'a2', text:'city', label:40 },
+    { value:1, text:'address', label:50 },
+    { value:2, text:'city', label:40 },
     { value:'a3', text:'gender', label:10 },
     { value:'a4', text:'country', label:1 },
 

@@ -1,6 +1,6 @@
 {
   "name": "se-react-checkbox-group",
-  "version": "1.0.21",
+  "version": "1.0.25",
   "main": "dist/component.js",
   "scripts": {
     "start": "webpack-dev-server",

@@ -37,6 +37,7 @@ class App extends React.Component {
         return (
           <div >
             <Component ref={this.myRef} data={arr1} checkedList={['a1']} prefire={false}
+                       optionRender={(text)=>text}
                        onChange={this.handleChange.bind(this)} />
             <button onClick={this.clean.bind(this)}>clean selected items</button>
           </div>

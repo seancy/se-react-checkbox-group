@@ -13,7 +13,7 @@ const CheckboxWrapper = styled.ul`
     }
 `
 
-class Component extends React.Component {
+class CheckboxGroup extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -61,7 +61,11 @@ class Component extends React.Component {
     }
 
     render() {
-        const {data} = this.props;
+        const {data, optionRender} = this.props;
+        const getItemText=(item)=>{
+            return optionRender ? optionRender(item.text, item) : (item.text || item.value)
+        }
+
         return (
             <CheckboxWrapper className={'se-react-checkbox-group ' + (this.props.className || '')}>
                 {data.map(item => {
@@ -70,7 +74,7 @@ class Component extends React.Component {
                         <li key={item.value}>
                             <input type="checkbox" id={id} value={item.value}
                                    checked={this.state.checkedList.includes(item.value)} onChange={e => this.changeCheckboxStatus(e, item)}/>
-                            <label htmlFor={id}>{item.text}</label>
+                            <label htmlFor={id} title={getItemText(item)}>{getItemText(item)}</label>
                             {item.label && <span>{item.label}</span>}
                         </li>
                     )
@@ -80,14 +84,21 @@ class Component extends React.Component {
     }
 }
 
-export default Component;
+export default CheckboxGroup;
 
-Component.propTypes = {
-    data:PropTypes.arrayOf(PropTypes.exact({
-        value:PropTypes.string,
-        text:PropTypes.string
+CheckboxGroup.propTypes = {
+    data:PropTypes.arrayOf(PropTypes.shape({
+        value:PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        text:PropTypes.string,
+        label:PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ])
     })),
-    prefire:PropTypes.Boolean,
-    checkedList:PropTypes.arrayOf(PropTypes.String),
+    prefire:PropTypes.bool,
+    checkedList:PropTypes.arrayOf(PropTypes.string),
     onChange:PropTypes.func,
 }
